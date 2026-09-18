@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modul Interaktif TIK: Pemrograman Visual Scratch</title>
+  <meta name="description" content="Media Pembelajaran Interaktif TIK SMP - Pemrograman Visual Berbasis Blok Menggunakan Scratch 3.0 dengan simulasi interaktif, kuis HOTS, asesmen, dan sertifikat." />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Canvas Confetti -->
+  <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+  <!-- Ambient Audio Visualizer Dot / Sound indicator -->
+  <div id="audioIndicator" class="audio-pulse-indicator" title="Musik Belajar Aktif">
+    <span></span><span></span><span></span>
+  </div>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="header-left">
+        <button class="nav-brand-btn" id="btnNavHome" title="Kembali ke Menu Utama">
+          <div class="scratch-logo-icon">
+            <span class="logo-cat">🐱</span>
+          </div>
+          <div class="brand-text">
+            <span class="brand-badge">TIK SMP · KELAS IX</span>
+            <h1 class="brand-title">Scratch<span class="brand-gradient">Mastery</span></h1>
+          </div>
+        </button>
+      </div>
+
+      <div class="header-center">
+        <!-- Progress Bar Tracker -->
+        <div class="overall-progress-card" id="overallProgressWrapper" title="Kemajuan Belajar Keseluruhan">
+          <div class="progress-info-row">
+            <span class="progress-label">Progres Belajar</span>
+            <span class="progress-percentage" id="overallProgressPercent">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="overallProgressBar" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- BGM Toggle -->
+        <button class="icon-tool-btn" id="btnAudioToggle" title="Musik Latar Belajar (Lo-Fi Ambient)">
+          <span class="btn-icon" id="audioIcon">🎵</span>
+          <span class="btn-label" id="audioText">BGM: OFF</span>
+        </button>
+
+        <!-- Dark/Light Mode Switcher -->
+        <button class="icon-tool-btn" id="btnThemeToggle" title="Ganti Mode Terang/Gelap">
+          <span class="btn-icon" id="themeIcon">🌙</span>
+          <span class="btn-label" id="themeText">Gelap</span>
+        </button>
+
+        <!-- Download Overall Results -->
+        <button class="icon-tool-btn highlight" id="btnDownloadSummary" title="Unduh Rangkuman Hasil Belajar">
+          <span class="btn-icon">📥</span>
+          <span class="btn-label">Hasil</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumb & Quick Nav Bar -->
+  <nav class="sub-nav-bar" id="subNav" style="display: none;">
+    <div class="sub-nav-inner">
+      <button class="back-home-btn" id="btnSubNavHome">
+        <span>🏠</span> Menu Utama
+      </button>
+      <div class="current-module-badge">
+        <span class="curr-module-icon" id="currModuleIcon">📌</span>
+        <span class="curr-module-title" id="currModuleTitle">Apersepsi</span>
+      </div>
+      <div class="module-quick-pills" id="moduleQuickPills">
+        <!-- Generated dynamically in JS -->
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="app-main-content">
+
+    <!-- ==============================================
+         VIEW 0: MENU UTAMA (INTERACTIVE CARDS DASHBOARD)
+         ============================================== -->
+    <section class="view-section active" id="viewMenuUtama">
+      <div class="hero-banner">
+        <div class="hero-content">
+          <span class="hero-chip">🚀 Modul Interaktif TIK 2026</span>
+          <h2 class="hero-heading">Eksplorasi Dunia Coding Bersama <span class="highlight-scratch">Scratch</span>!</h2>
+          <p class="hero-desc">
+            Pelajari konsep berpikir komputasional, rakit blok logika, buat animasi seru, dan raih sertifikat kompetensi belajarmu secara mandiri dan interaktif.
+          </p>
+          <div class="hero-badges-row">
+            <div class="mini-stat-pill">
+              <span class="pill-icon">📚</span>
+              <span class="pill-val">8 Modul Terpadu</span>
+            </div>
+            <div class="mini-stat-pill">
+              <span class="pill-icon">🎮</span>
+              <span class="pill-val">Simulasi Kode Visual</span>
+            </div>
+            <div class="mini-stat-pill">
+              <span class="pill-icon">🏆</span>
+              <span class="pill-val">Sertifikat Resmi</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-graphic">
+          <div class="scratch-stage-mockup">
+            <div class="mockup-flag">🚩</div>
+            <div class="mockup-sprite-wrapper">
+              <div class="mockup-cat">🐱</div>
+              <div class="speech-bubble">Halo! Mari belajar Scratch! ✨</div>
+            </div>
+            <div class="code-blocks-float">
+              <div class="float-block ev">when ⚑ clicked</div>
+              <div class="float-block mot">move 10 steps</div>
+              <div class="float-block look">say [Halo!] for 2 secs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Title -->
+      <div class="section-title-wrap">
+        <h3 class="section-heading">Daftar Modul Belajar</h3>
+        <p class="section-subtext">Pilih kartu di bawah untuk memulai tahapan belajarmu secara berurutan:</p>
+      </div>
+
+      <!-- 8 Interactive Menu Cards Grid -->
+      <div class="menu-cards-grid">
+        
+        <!-- Card 1: Apersepsi -->
+        <div class="menu-card" data-module="1" id="cardModule1">
+          <div class="card-status-chip pending" id="statusChip1">Belum Selesai</div>
+          <div class="card-icon-circle c-orange">
+            <span class="card-emoji">📌</span>
+          </div>
+          <div class="card-body">
+            <span class="card-step-num">Langkah 01</span>
+            <h4 class="card-title">Apersepsi</h4>
+            <p class="card-desc">Buka rasa ingin tahu dengan video & gambar pemantik tentang kekuatan di balik kode.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-action-text">Mulai Apersepsi</span>
+            <span class="arrow-icon">➔</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Asesmen Awal -->
+        <div class="menu-card" data-module="2" id="cardModule2">
+          <div class="card-status-chip pending" id="statusChip2">Belum Selesai</div>
+          <div class="card-icon-circle c-blue">
+            <span class="card-emoji">📝</span>
+          </div>
+          <div class="card-body">
+            <span class="card-step-num">Langkah 02</span>
+            <h4 class="card-title">Asesmen Awal</h4>
+            <p class="card-desc">Uji pengetahuan awalmu melalui 5 soal diagnostik dengan penilaian instan.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-action-text">Ikuti Tes Awal</span>
+            <span class="arrow-icon">➔</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Materi Pembelajaran -->
+        <div class="menu-card" data-module="3" id="cardModule3">
+          <div class="card-status-chip pending" id="statusChip3">Belum Selesai</div>
+          <div class="card-icon-circle c-purple">
+            <span class="card-emoji">📖</span>
+          </div>
+          <div class="card-body">
+            <span class="card-step-num">Langkah 03</span>
+            <h4 class="card-title">Materi Pembelajaran</h4>
+            <p class="card-desc">Jelajahi antarmuka Scratch, 9 kategori blok, diagram logika, dan fakta menarik tosca.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-action-text">Pelajari Materi</span>
+            <span class="arrow-icon">➔</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Simulasi / Aktivitas -->
+        <div class="menu-card" data-module="4" id="cardModule4">
+          <div class="card-status-chip pending" id="statusChip4">Belum Selesai</div>
+          <div class="card-icon-circle c-green">
+            <span class="card-emoji">🧩</span>
+          </div>
+          <div class="card-body">
+            <span class="card-step-num">Langkah 04</span>
+            <h4 class="card-title">Simulasi &amp; Aktivitas</h4>
+            <p class="card-desc">Rakit balok perintah, jalankan sprite kucing interaktif di panggung live simulator.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-action-text">Coba Simulasi</span>
+            <span class="arrow-icon">➔</span>
+          </div>
+        </div>
+
+        <!-- Card 5: Kuis Interaktif -->
+        <div class="menu-card" data-module="5" id="cardModule5">
+          <div class="card-status-chip pending" id="statusChip5">Belum Selesai</div>
+          <div class="card-icon-circle c-yellow">
+            <span class="card-emoji">⚡</span>
+          </div>
+          <div class="card-body">
+            <span class="card-step-num">Langkah 05</span>
+            <h4 class="card-title">Kuis Interaktif</h4>
+            <p class="card-desc">Tantang pemikiran logismu dengan 10 soal HOTS, timer, dan pembahasan detail.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-action-text">Mulai Kuis HOTS</span>
+            <span class="arrow-icon">➔</span>
+          </div>
+        </div>
+
+        <!-- Card 6: Asesmen Akhir -->
+        <div class="menu-card" data-module="6" id="cardModule6">
+          <div class="card-status-chip pending" id="statusChip6">Belum Selesai</div>
+          <div class="card-icon-circle c-red">
+            <span class="card-emoji">🎯</span>
+          </div>
+          <div class="card-body">
+            <span class="card-step-num">Langkah 06</span>
+            <h4 class="card-title">Asesmen Akhir</h4>
+            <p class="card-desc">Uji pemahaman komprehensif 10 soal untuk menentukan nilai akhir dan predikat prestasimu.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-action-text">Ikuti Ujian Akhir</span>
+            <span class="arrow-icon">➔</span>
+          </div>
+        </div>
+
+        <!-- Card 7: Refleksi -->
+        <div class="menu-card" data-module="7" id="cardModule7">
+          <div class="card-status-chip pending" id="statusChip7">Belum Selesai</div>
+          <div class="card-icon-circle c-teal">
+            <span class="card-emoji">💭</span>
+          </div>
+          <div class="card-body">
+            <span class="card-step-num">Langkah 07</span>
+            <h4 class="card-title">Refleksi Belajar</h4>
+            <p class="card-desc">Tuliskan pengalaman, pemahaman baru, dan rencana belajarmu ke depan.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-action-text">Isi Refleksi</span>
+            <span class="arrow-icon">➔</span>
+          </div>
+        </div>
+
+        <!-- Card 8: Sertifikat -->
+        <div class="menu-card highlight-cert" data-module="8" id="cardModule8">
+          <div class="card-status-chip pending" id="statusChip8">Terkunci</div>
+          <div class="card-icon-circle c-gold">
+            <span class="card-emoji">🎓</span>
+          </div>
+          <div class="card-body">
+            <span class="card-step-num">Langkah 08</span>
+            <h4 class="card-title">Sertifikat Hasil Belajar</h4>
+            <p class="card-desc">Dapatkan sertifikat resmi digital modern (Ungu &amp; Tosca) yang siap diunduh PDF dan dicetak.</p>
+          </div>
+          <div class="card-footer">
+            <span class="card-action-text">Klaim Sertifikat</span>
+            <span class="arrow-icon">➔</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Digital Badges Showcase -->
+      <div class="badges-dashboard">
+        <h4 class="badges-title">🏅 Penghargaan &amp; Lencana Digital Kamu</h4>
+        <div class="badges-grid">
+          <div class="badge-item locked" id="badge1">
+            <div class="badge-icon">🌟</div>
+            <div class="badge-name">First Step</div>
+            <div class="badge-desc">Menyelesaikan Apersepsi &amp; Pre-Test</div>
+          </div>
+          <div class="badge-item locked" id="badge2">
+            <div class="badge-icon">💡</div>
+            <div class="badge-name">Logic Explorer</div>
+            <div class="badge-desc">Membaca seluruh materi Scratch</div>
+          </div>
+          <div class="badge-item locked" id="badge3">
+            <div class="badge-icon">🧩</div>
+            <div class="badge-name">Block Crafter</div>
+            <div class="badge-desc">Menjalankan simulasi Scratch Lab</div>
+          </div>
+          <div class="badge-item locked" id="badge4">
+            <div class="badge-icon">⚡</div>
+            <div class="badge-name">HOTS Champion</div>
+            <div class="badge-desc">Meraih skor Kuis HOTS ≥ 80</div>
+          </div>
+          <div class="badge-item locked" id="badge5">
+            <div class="badge-icon">🏆</div>
+            <div class="badge-name">Scratch Master</div>
+            <div class="badge-desc">Asesmen Akhir predikat Sangat Baik</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 1: APERSEPSI
+         ============================================== -->
+    <section class="view-section" id="viewModule1">
+      <div class="module-header-banner">
+        <span class="module-tag">Modul 1 · Tahap Pendahuluan</span>
+        <h2 class="module-headline">📌 Apersepsi: Membangkitkan Rasa Ingin Tahu</h2>
+        <p class="module-sub">Sebelum kita menyelami kode, mari renungkan bagaimana dunia digital di sekeliling kita sebenarnya bekerja!</p>
+      </div>
+
+      <div class="module-content-grid">
+        <!-- Media Pemantik -->
+        <div class="media-column">
+          <!-- Gambar Pemantik -->
+          <div class="interactive-panel mb-4">
+            <h4 class="panel-subtitle">🖼️ Gambar Pemantik: Di Balik Gerakan Karakter</h4>
+            <div class="spark-image-wrapper">
+              <svg viewBox="0 0 500 280" class="spark-svg-illustration">
+                <!-- Background grid -->
+                <defs>
+                  <linearGradient id="skyGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#1e1b4b" />
+                    <stop offset="100%" stop-color="#0f172a" />
+                  </linearGradient>
+                  <linearGradient id="purpleGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#8b5cf6" />
+                    <stop offset="100%" stop-color="#6d28d9" />
+                  </linearGradient>
+                </defs>
+                <rect width="500" height="280" rx="16" fill="url(#skyGrad)" />
+                <!-- Grid lines -->
+                <line x1="50" y1="0" x2="50" y2="280" stroke="rgba(255,255,255,0.05)" />
+                <line x1="150" y1="0" x2="150" y2="280" stroke="rgba(255,255,255,0.05)" />
+                <line x1="250" y1="0" x2="250" y2="280" stroke="rgba(255,255,255,0.05)" />
+                <line x1="350" y1="0" x2="350" y2="280" stroke="rgba(255,255,255,0.05)" />
+                <line x1="450" y1="0" x2="450" y2="280" stroke="rgba(255,255,255,0.05)" />
+                <line x1="0" y1="140" x2="500" y2="140" stroke="rgba(56,189,248,0.2)" stroke-dasharray="4,4" />
+                
+                <!-- Computer Monitor & Scratch Cat Character -->
+                <rect x="70" y="45" width="220" height="150" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+                <rect x="80" y="55" width="200" height="130" rx="8" fill="#1e293b" />
+                <!-- Ground in monitor -->
+                <rect x="80" y="150" width="200" height="35" fill="#334155" />
+                <!-- Cat character standing -->
+                <circle cx="150" cy="115" r="24" fill="#f59e0b" />
+                <polygon points="135,95 142,108 130,105" fill="#f59e0b" />
+                <polygon points="165,95 158,108 170,105" fill="#f59e0b" />
+                <circle cx="143" cy="113" r="3" fill="#ffffff" />
+                <circle cx="157" cy="113" r="3" fill="#ffffff" />
+                <circle cx="143" cy="113" r="1.5" fill="#000" />
+                <circle cx="157" cy="113" r="1.5" fill="#000" />
+                <ellipse cx="150" cy="120" rx="3" ry="2" fill="#d97706" />
+                <!-- Question mark floating -->
+                <text x="185" y="100" font-family="'Outfit', sans-serif" font-size="28" font-weight="bold" fill="#f43f5e" class="svg-bounce">❓</text>
+                
+                <!-- Puzzle Block Connector on the right -->
+                <g transform="translate(320, 60)">
+                  <!-- Event Block -->
+                  <rect x="0" y="0" width="150" height="34" rx="6" fill="#ffbf00" />
+                  <text x="12" y="22" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="700" fill="#000">when ⚑ clicked</text>
+                  
+                  <!-- Motion Block with puzzle notch -->
+                  <rect x="0" y="40" width="150" height="34" rx="6" fill="#4c97ff" />
+                  <text x="12" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="700" fill="#fff">move [ ? ] steps</text>
+                  
+                  <!-- Control block -->
+                  <rect x="0" y="80" width="150" height="34" rx="6" fill="#ffab19" />
+                  <text x="12" y="102" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="700" fill="#fff">forever: ???</text>
+                </g>
+
+                <!-- Caption text inside illustration -->
+                <text x="250" y="240" font-family="'Outfit', sans-serif" font-size="14" fill="#94a3b8" text-anchor="middle">
+                  Karakter di layar hanyalah gambar diam tanpa instruksi berurutan.
+                </text>
+                <text x="250" y="262" font-family="'Outfit', sans-serif" font-size="13" font-weight="600" fill="#38bdf8" text-anchor="middle">
+                  Siapakah yang memberi tahu kapan dia harus berjalan, melompat, atau berbicara?
+                </text>
+              </svg>
+            </div>
+            <p class="img-caption">Ilustrasi: Hubungan antara karakter virtual dengan balok-balok logika perintah.</p>
+          </div>
+
+          <!-- Video Pemantik (Placeholder Interaktif) -->
+          <div class="interactive-panel">
+            <h4 class="panel-subtitle">🎬 Video Pemantik: "Bagaimana Game Diciptakan?"</h4>
+            <div class="video-placeholder-container" id="videoPlaceholder">
+              <div class="video-poster">
+                <div class="video-overlay-glow"></div>
+                <div class="video-thumbnail-content">
+                  <span class="video-badge">PREVIEW VIDEO SIMULASI</span>
+                  <h5 class="video-title">Animasi Konseptual: Mengapa Kita Butuh Bahasa Pemrograman Blok?</h5>
+                  <p class="video-durasi">⏱️ Durasi: 1 Menit 45 Detik</p>
+                  <button class="btn-play-video" id="btnPlayVideoMock" title="Putar Video Interaktif">
+                    <span class="play-icon">▶</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pertanyaan Pemantik & Curah Ide -->
+        <div class="questions-column">
+          <div class="interactive-panel inquiry-panel">
+            <h4 class="panel-subtitle">🤔 Pertanyaan Pemantik</h4>
+            <p class="inquiry-intro">Renungkan pertanyaan di bawah ini sebelum membaca materi apa pun:</p>
+
+            <div class="spark-question-card">
+              <div class="spark-q-num">Pertanyaan 1</div>
+              <p class="spark-q-text">"Apa yang akan terjadi jika karakter di dalam video game favoritmu sama sekali tidak memiliki aturan / kode perintah?"</p>
+              <div class="spark-interactive-choices" data-qid="q1">
+                <button class="choice-bubble" onclick="handleSparkChoice(this, 'Tepat sekali! Karakter akan mematung tanpa tahu apa yang harus dilakukan ketika tombol keyboard ditekan.')">Karakter akan diam mematung</button>
+                <button class="choice-bubble" onclick="handleSparkChoice(this, 'Bisa saja karakter menembus dinding atau jatuh ke ruang hampa karena ketiadaan hukum fisika digital.')">Karakter menembus dinding / layar</button>
+                <button class="choice-bubble" onclick="handleSparkChoice(this, 'Betul! Game tidak akan bisa dimainkan karena tidak ada logika aturan interaksi.')">Game menjadi kacau dan rusak</button>
+              </div>
+              <div class="spark-feedback" id="sparkFeedback1"></div>
+            </div>
+
+            <div class="spark-question-card mt-3">
+              <div class="spark-q-num">Pertanyaan 2</div>
+              <p class="spark-q-text">"Apa pendapatmu tentang anggapan bahwa 'coding hanya untuk orang yang pintar matematika rumit'?"</p>
+              <div class="spark-interactive-choices" data-qid="q2">
+                <button class="choice-bubble" onclick="handleSparkChoice(this, 'Faktanya, coding Scratch berfokus pada kreativitas menyusun logika, seperti merakit balok LEGO!')">Kurang setuju, coding itu seperti merakit puzzle LEGO</button>
+                <button class="choice-bubble" onclick="handleSparkChoice(this, 'Siapa pun dari segala usia bisa membuat karya seru dengan cara yang visual dan menyenangkan!')">Semua orang bisa belajar secara bertahap</button>
+              </div>
+              <div class="spark-feedback" id="sparkFeedback2"></div>
+            </div>
+
+            <!-- Curah Ide Siswa -->
+            <div class="spark-reflection-box mt-3">
+              <label for="studentCuriosityInput" class="form-label">
+                💡 Tuliskan rasa penasaranmu: <strong>"Kira-kira karya apa yang paling ingin kamu buat dengan Scratch?"</strong>
+              </label>
+              <textarea id="studentCuriosityInput" rows="3" class="form-textarea" placeholder="Contoh: Saya ingin membuat game petualangan kucing yang bisa melompati rintangan dan mencetak skor..."></textarea>
+              <button class="btn btn-tosca mt-2" id="btnSubmitCuriosity">Kirim Rasa Penasaran 🚀</button>
+              <div class="curiosity-response" id="curiosityResponse"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Module Navigation Footer -->
+      <div class="module-nav-footer">
+        <button class="btn btn-outline" onclick="navigateToModule(0)">⬅️ Menu Utama</button>
+        <button class="btn btn-primary" onclick="markCompletedAndNext(1)">Lanjut ke Asesmen Awal ➡️</button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 2: ASESMEN AWAL (DIAGNOSTIK)
+         ============================================== -->
+    <section class="view-section" id="viewModule2">
+      <div class="module-header-banner">
+        <span class="module-tag">Modul 2 · Diagnostik Pengetahuan Awal</span>
+        <h2 class="module-headline">📝 Asesmen Awal: Seberapa Jauh Kamu Mengenal Coding?</h2>
+        <p class="module-sub">Jawab 5 soal singkat berikut untuk mengidentifikasi pengetahuan awalmu. Jangan takut salah, ini adalah langkah awal petualanganmu!</p>
+      </div>
+
+      <div class="assessment-container">
+        <div class="assessment-card">
+          <!-- Pretest Progress & Live Counter -->
+          <div class="quiz-top-bar">
+            <span class="quiz-step-counter" id="pretestCounter">Soal 1 dari 5</span>
+            <div class="quiz-score-indicator" id="pretestLiveScore">Skor Sementara: 0</div>
+          </div>
+          
+          <div class="quiz-progress-track">
+            <div class="quiz-progress-bar" id="pretestProgressBar" style="width: 20%;"></div>
+          </div>
+
+          <!-- Question Content Area -->
+          <div class="question-body" id="pretestQuestionArea">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Assessment Result Summary (Hidden until finished) -->
+          <div class="assessment-summary-card" id="pretestResultCard" style="display: none;">
+            <div class="result-icon-badge">🎯</div>
+            <h3 class="result-title">Hasil Asesmen Awal Kamu</h3>
+            <div class="result-score-display" id="pretestFinalScore">0 / 100</div>
+            <p class="result-feedback" id="pretestFeedbackText">Umpan balik diagnostik...</p>
+            <div class="result-actions">
+              <button class="btn btn-outline" id="btnRetryPretest">🔄 Coba Ulang</button>
+              <button class="btn btn-primary" onclick="markCompletedAndNext(2)">Lanjut ke Materi Pembelajaran ➡️</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module Navigation Footer -->
+      <div class="module-nav-footer">
+        <button class="btn btn-outline" onclick="navigateToModule(1)">⬅️ Kembali ke Apersepsi</button>
+        <button class="btn btn-primary" onclick="markCompletedAndNext(2)">Lanjut ke Materi ➡️</button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 3: MATERI PEMBELAJARAN (SCRATCH 3.0)
+         ============================================== -->
+    <section class="view-section" id="viewModule3">
+      <div class="module-header-banner">
+        <span class="module-tag">Modul 3 · Teori &amp; Konsep Visual</span>
+        <h2 class="module-headline">📖 Pemrograman Visual Berbasis Blok dengan Scratch</h2>
+        <p class="module-sub">Pelajari anatomi antarmuka Scratch, 9 kategori balok kode warna-warni, serta logika komputasi dengan bahasa yang mudah dipahami.</p>
+      </div>
+
+      <!-- Material Tabs -->
+      <div class="material-tabs">
+        <button class="mat-tab active" data-tab="tab-intro">1. Pengenalan &amp; Antarmuka</button>
+        <button class="mat-tab" data-tab="tab-blocks">2. 9 Kategori Blok</button>
+        <button class="mat-tab" data-tab="tab-diagram">3. Logika &amp; Diagram Alir</button>
+        <button class="mat-tab" data-tab="tab-table">4. Tabel &amp; Rangkuman</button>
+      </div>
+
+      <!-- Tab 1: Pengenalan & Antarmuka -->
+      <div class="tab-pane active" id="tab-intro">
+        <!-- Tosca Highlight Box: Tahukah Kamu? -->
+        <div class="tosca-callout-card mb-4">
+          <div class="callout-header">
+            <span class="callout-icon">💡</span>
+            <h4 class="callout-title">Tahukah Kamu?</h4>
+          </div>
+          <p class="callout-content">
+            <strong>Scratch</strong> dikembangkan oleh kelompok <em>Lifelong Kindergarten Group</em> di <strong>MIT Media Lab</strong>, dipimpin oleh Profesor <strong>Mitchel Resnick</strong>. Filosofi Scratch adalah <em>"Creative Learning Spiral"</em>: Bayangkan, Ciptakan, Mainkan, Bagikan, Refleksikan, dan Ulangi!
+          </p>
+        </div>
+
+        <div class="content-card">
+          <h3 class="mat-title">Apa itu Scratch?</h3>
+          <p class="mat-text">
+            <strong>Scratch</strong> adalah bahasa pemrograman visual berbasis blok (block-based visual programming language) yang dirancang khusus untuk pemula. Alih-alih mengetik kode baris demi baris yang rentan salah ketik titik koma (*syntax error*), di Scratch kamu cukup <strong>menyeret (*drag*)</strong> dan <strong>menempelkan (*snap*)</strong> balok-balok perintah seperti merakit puzzle balok warna-warni.
+          </p>
+
+          <!-- Diagram Antarmuka Interaktif -->
+          <h4 class="submat-title mt-4">Anatomi Antarmuka Scratch 3.0</h4>
+          <p class="mat-text">Antarmuka Scratch dibagi menjadi 5 komponen utama yang saling terhubung:</p>
+
+          <div class="scratch-ui-anatomy-grid">
+            <div class="ui-part-card">
+              <div class="part-badge">1</div>
+              <h5 class="part-title">🎭 Panggung (Stage)</h5>
+              <p class="part-desc">Layar tempat animasi, karakter, dan permainan berjalan. Menggunakan koordinat Kartesius: sumbu <strong>X (-240 hingga +240)</strong> dan sumbu <strong>Y (-180 hingga +180)</strong>.</p>
+            </div>
+            <div class="ui-part-card">
+              <div class="part-badge">2</div>
+              <h5 class="part-title">🐱 Sprite &amp; Latar (Backdrop)</h5>
+              <p class="part-desc">Objek atau karakter interaktif di dalam panggung. Kamu bisa memilih ratusan karakter bawaan, menggambar sendiri, atau mengunggah foto.</p>
+            </div>
+            <div class="ui-part-card">
+              <div class="part-badge">3</div>
+              <h5 class="part-title">🎨 Palet Blok (Block Palette)</h5>
+              <p class="part-desc">Gudang penyimpanan balok kode yang dikelompokkan berdasarkan warna dan fungsi (Gerakan, Tampilan, Suara, Kejadian, dll).</p>
+            </div>
+            <div class="ui-part-card">
+              <div class="part-badge">4</div>
+              <h5 class="part-title">🧩 Area Skrip (Scripts Area)</h5>
+              <p class="part-desc">Meja kerja tempat kamu menyusun dan merangkai balok-balok instruksi menjadi program utuh untuk sprite yang aktif.</p>
+            </div>
+            <div class="ui-part-card">
+              <div class="part-badge">5</div>
+              <h5 class="part-title">🚩 Bendera Hijau &amp; Tombol Stop 🛑</h5>
+              <p class="part-desc">Tombol kontrol utama untuk memulai jalannya program (Green Flag) dan menghentikan seluruh aktivitas kode seketika (Stop Sign).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tosca Highlight Box: Info Penting -->
+        <div class="tosca-callout-card mt-4">
+          <div class="callout-header">
+            <span class="callout-icon">⚠️</span>
+            <h4 class="callout-title">Info Penting: Sistem Koordinat Scratch</h4>
+          </div>
+          <p class="callout-content">
+            Titik tengah panggung Scratch tepat berada pada koordinat <strong>(X: 0, Y: 0)</strong>. 
+            Jika sprite bergerak ke kanan, nilai <strong>X bertambah positif (+)</strong>. Jika bergerak ke kiri, nilai <strong>X berkurang negatif (-)</strong>. 
+            Begitu pula ke atas <strong>(Y positif)</strong> dan ke bawah <strong>(Y negatif)</strong>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tab 2: 9 Kategori Blok -->
+      <div class="tab-pane" id="tab-blocks">
+        <!-- Tosca Highlight Box: Fakta Menarik -->
+        <div class="tosca-callout-card mb-4">
+          <div class="callout-header">
+            <span class="callout-icon">✨</span>
+            <h4 class="callout-title">Fakta Menarik</h4>
+          </div>
+          <p class="callout-content">
+            Pewarnaan balok Scratch sengaja dibuat konsisten di seluruh dunia! Setiap programmer Scratch di Indonesia, Jepang, Amerika, hingga Brasil mengenali bahwa balok <strong>Biru adalah Gerakan</strong> dan balok <strong>Kuning adalah Kejadian</strong>. Bahasa visual ini menembus batasan bahasa manusia!
+          </p>
+        </div>
+
+        <div class="content-card">
+          <h3 class="mat-title">9 Kategori Balok Kode Scratch &amp; Fungsinya</h3>
+          <p class="mat-text">Klik salah satu kategori balok di bawah untuk melihat detail fungsi dan contoh baloknya:</p>
+
+          <!-- Interactive 9 Blocks Palette Explorer -->
+          <div class="blocks-palette-showcase">
+            <div class="category-pill-list" id="blockCategoryPills">
+              <button class="cat-btn active" data-cat="motion" style="--c: #4c97ff;">🔵 Motion (Gerakan)</button>
+              <button class="cat-btn" data-cat="looks" style="--c: #9966ff;">🟣 Looks (Tampilan)</button>
+              <button class="cat-btn" data-cat="sound" style="--c: #cf63cf;">🌸 Sound (Suara)</button>
+              <button class="cat-btn" data-cat="events" style="--c: #ffbf00;">🟡 Events (Kejadian)</button>
+              <button class="cat-btn" data-cat="control" style="--c: #ffab19;">🟠 Control (Kontrol)</button>
+              <button class="cat-btn" data-cat="sensing" style="--c: #5cb1d6;">🩵 Sensing (Sensor)</button>
+              <button class="cat-btn" data-cat="operators" style="--c: #59c059;">🟢 Operators (Operator)</button>
+              <button class="cat-btn" data-cat="variables" style="--c: #ff8c1a;">🟧 Variables (Variabel)</button>
+              <button class="cat-btn" data-cat="myblocks" style="--c: #ff6680;">🔴 My Blocks (Blok Saya)</button>
+            </div>
+
+            <div class="category-detail-panel" id="categoryDetailPanel">
+              <!-- Dynamically updated -->
+              <div class="block-preview-card" style="border-left: 6px solid #4c97ff;">
+                <span class="b-tag" style="background: #4c97ff;">Motion / Gerakan</span>
+                <h4 class="b-title">Mengatur Posisi, Arah, dan Perpindahan Sprite</h4>
+                <p class="b-desc">Kategori ini digunakan saat kamu ingin menggerakkan sprite maju, memutar derajat sudutnya, meluncur (glide) ke koordinat tertentu, atau memantul saat menyentuh tepi panggung.</p>
+                <div class="sample-blocks-list">
+                  <div class="sample-block" style="background: #4c97ff;">move (10) steps</div>
+                  <div class="sample-block" style="background: #4c97ff;">turn ↷ (15) degrees</div>
+                  <div class="sample-block" style="background: #4c97ff;">go to x: (0) y: (0)</div>
+                  <div class="sample-block" style="background: #4c97ff;">if on edge, bounce</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Diagram Alir & Logika -->
+      <div class="tab-pane" id="tab-diagram">
+        <div class="content-card">
+          <h3 class="mat-title">Logika Pemrograman dalam Scratch</h3>
+          <p class="mat-text">
+            Dalam computational thinking, semua program komputer disusun berdasarkan 3 struktur dasar logika:
+          </p>
+
+          <div class="logic-flow-grid">
+            <!-- 1. Sekuensial -->
+            <div class="logic-card">
+              <div class="logic-header">
+                <span class="logic-badge">1</span>
+                <h4>Runtunan (Sequential)</h4>
+              </div>
+              <p class="logic-desc">Instruksi dijalankan berurutan satu per satu dari atas ke bawah persis seperti resep kue.</p>
+              <div class="logic-diagram">
+                <div class="diag-node">Langkah 1: Gerak 10 langkah</div>
+                <div class="diag-arrow">⬇️</div>
+                <div class="diag-node">Langkah 2: Katakan "Hai!"</div>
+                <div class="diag-arrow">⬇️</div>
+                <div class="diag-node">Langkah 3: Putar 90 derajat</div>
+              </div>
+            </div>
+
+            <!-- 2. Perulangan (Looping) -->
+            <div class="logic-card">
+              <div class="logic-header">
+                <span class="logic-badge">2</span>
+                <h4>Perulangan (Loop / Iteration)</h4>
+              </div>
+              <p class="logic-desc">Mengulang blok instruksi berkali-kali tanpa perlu menulis ulang perintah yang sama.</p>
+              <div class="logic-diagram">
+                <div class="diag-node loop-head">🔁 repeat (10) atau forever</div>
+                <div class="diag-inner-box">
+                  <div class="diag-node child">Next costume (ganti kostum)</div>
+                  <div class="diag-node child">Wait 0.1 secs</div>
+                </div>
+                <div class="diag-loop-return">↺ Mengulang terus selama kondisi terpenuhi</div>
+              </div>
+            </div>
+
+            <!-- 3. Percabangan (Conditional) -->
+            <div class="logic-card">
+              <div class="logic-header">
+                <span class="logic-badge">3</span>
+                <h4>Percabangan (If - Then - Else)</h4>
+              </div>
+              <p class="logic-desc">Membuat keputusan cerdas berdasarkan kondisi tertentu yang bernilai Benar (True) atau Salah (False).</p>
+              <div class="logic-diagram">
+                <div class="diag-node cond-head">❓ Jika menyentuh batas layar?</div>
+                <div class="cond-branches">
+                  <div class="cond-branch true">
+                    <span class="b-lbl">YA (True)</span>
+                    <div class="diag-node">Pantulkan (Bounce)</div>
+                  </div>
+                  <div class="cond-branch false">
+                    <span class="b-lbl">TIDAK (False)</span>
+                    <div class="diag-node">Lanjut Berjalan</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Tabel & Rangkuman -->
+      <div class="tab-pane" id="tab-table">
+        <div class="content-card">
+          <h3 class="mat-title">Tabel Perbandingan Fungsi Blok Scratch</h3>
+          <p class="mat-text">Rangkuman cepat karakteristik masing-masing blok untuk referensi belajarmu:</p>
+
+          <div class="table-responsive">
+            <table class="scratch-summary-table">
+              <thead>
+                <tr>
+                  <th>Warna</th>
+                  <th>Kategori</th>
+                  <th>Fungsi Utama</th>
+                  <th>Bentuk Balok</th>
+                  <th>Contoh Kasus</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="color-dot" style="background:#ffbf00;"></span> Kuning</td>
+                  <td><strong>Events</strong></td>
+                  <td>Memicu kapan kode mulai dieksekusi (pemicu awal)</td>
+                  <td>Topi melengkung di atas <em>(Hat Block)</em></td>
+                  <td>Ketika tombol spasi ditekan, ketika sprite diklik</td>
+                </tr>
+                <tr>
+                  <td><span class="color-dot" style="background:#4c97ff;"></span> Biru</td>
+                  <td><strong>Motion</strong></td>
+                  <td>Memindahkan posisi fisik sprite di kanvas koordinat</td>
+                  <td>Balok susun bertakik <em>(Stack Block)</em></td>
+                  <td>Karakter berjalan maju 10 langkah, melompat</td>
+                </tr>
+                <tr>
+                  <td><span class="color-dot" style="background:#9966ff;"></span> Ungu</td>
+                  <td><strong>Looks</strong></td>
+                  <td>Mengubah kostum, balon dialog, ukuran, efek visual</td>
+                  <td>Balok susun bertakik <em>(Stack Block)</em></td>
+                  <td>Karakter berbicara "Halo Dunia!", ganti kostum jalan</td>
+                </tr>
+                <tr>
+                  <td><span class="color-dot" style="background:#ffab19;"></span> Oranye</td>
+                  <td><strong>Control</strong></td>
+                  <td>Mengatur aliran program (jeda waktu, loop, kondisi)</td>
+                  <td>Bentuk mulut buaya <em>(C-Block)</em></td>
+                  <td>Perulangan selamanya (forever), jika kena musuh</td>
+                </tr>
+                <tr>
+                  <td><span class="color-dot" style="background:#5cb1d6;"></span> Biru Muda</td>
+                  <td><strong>Sensing</strong></td>
+                  <td>Mendeteksi interaksi mouse, sentuhan warna, input siswa</td>
+                  <td>Bentuk berlian heksagonal <em>(Boolean Block)</em></td>
+                  <td>Apakah sprite menyentuh bola? Mendeteksi klik mouse</td>
+                </tr>
+                <tr>
+                  <td><span class="color-dot" style="background:#ff8c1a;"></span> Oranye Tua</td>
+                  <td><strong>Variables</strong></td>
+                  <td>Menyimpan nilai data dinamis yang bisa bertambah/berubah</td>
+                  <td>Bentuk lonjong oval <em>(Reporter Block)</em></td>
+                  <td>Menghitung skor pemain, sisa nyawa, waktu mundur</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Poin-Poin Penting Ringkasan -->
+          <div class="key-points-card mt-4">
+            <h4 class="key-points-title">📌 Poin-Poin Penting untuk Diingat:</h4>
+            <ul class="key-points-list">
+              <li>Setiap skrip kode di Scratch <strong>wajib diawali dengan balok Events</strong> (seperti `when ⚑ clicked`) agar komputer tahu kapan harus mulai bergerak.</li>
+              <li>Satu Sprite dapat memiliki <strong>banyak skrip kode sekaligus</strong> yang berjalan secara bersamaan (*multithreading* / paralel).</li>
+              <li>Untuk membuat animasi gerakan kaki berjalan, kombinasikan balok `move 10 steps` dengan balok `next costume` di dalam perulangan `forever` dengan jeda `wait 0.1 seconds`.</li>
+              <li>Variabel adalah wadah digital penyimpan angka atau kata yang sangat krusial untuk membuat game interaktif dan sistem skor.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module Navigation Footer -->
+      <div class="module-nav-footer">
+        <button class="btn btn-outline" onclick="navigateToModule(2)">⬅️ Kembali ke Asesmen Awal</button>
+        <button class="btn btn-primary" onclick="markCompletedAndNext(3)">Lanjut ke Simulasi &amp; Aktivitas ➡️</button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 4: SIMULASI / AKTIVITAS INTERAKTIF
+         ============================================== -->
+    <section class="view-section" id="viewModule4">
+      <div class="module-header-banner">
+        <span class="module-tag">Modul 4 · Simulasi Langsung</span>
+        <h2 class="module-headline">🧩 Scratch Lab: Susun Blok &amp; Lihat Karakter Bergerak!</h2>
+        <p class="module-sub">Uji coba pemahamanmu secara nyata. Rakit blok instruksi ke dalam area skrip, tekan tombol jalankan, dan saksikan kucing Scratch beraksi secara live!</p>
+      </div>
+
+      <!-- Simulation Layout: 2 Columns (Block Workbench & Stage Canvas) -->
+      <div class="scratch-lab-container">
+        
+        <!-- Left Column: Blocks Palette & Workspace -->
+        <div class="workbench-column">
+          <div class="lab-panel">
+            <div class="panel-header-bar">
+              <span class="ph-title">🧩 Balok Instruksi Tersedia (Klik untuk Menambahkan)</span>
+              <button class="btn-clear-script" id="btnClearBlocks" title="Bersihkan Skrip">🗑️ Bersihkan</button>
+            </div>
+
+            <div class="available-blocks-pool" id="blocksPool">
+              <!-- Event Blocks -->
+              <button class="code-block b-event" data-block-id="flag">
+                <span class="blk-icon">🚩</span> when [Bendera Hijau] diklik
+              </button>
+              
+              <!-- Motion Blocks -->
+              <button class="code-block b-motion" data-block-id="move">
+                <span class="blk-icon">➡️</span> gerak (20) langkah
+              </button>
+              <button class="code-block b-motion" data-block-id="turnRight">
+                <span class="blk-icon">↻</span> putar ke kanan (15) derajat
+              </button>
+              <button class="code-block b-motion" data-block-id="turnLeft">
+                <span class="blk-icon">↺</span> putar ke kiri (15) derajat
+              </button>
+              <button class="code-block b-motion" data-block-id="jump">
+                <span class="blk-icon">⬆️</span> lompat ke atas (Y: +40)
+              </button>
+
+              <!-- Looks Blocks -->
+              <button class="code-block b-looks" data-block-id="sayHello">
+                <span class="blk-icon">💬</span> katakan "Halo Teman!" (2 detik)
+              </button>
+              <button class="code-block b-looks" data-block-id="sayCode">
+                <span class="blk-icon">💡</span> katakan "Aku suka coding!" (2 detik)
+              </button>
+              <button class="code-block b-looks" data-block-id="changeColor">
+                <span class="blk-icon">🌈</span> ubah efek warna sprite
+              </button>
+              <button class="code-block b-looks" data-block-id="changeSize">
+                <span class="blk-icon">🔍</span> perbesar ukuran sprite (+10%)
+              </button>
+
+              <!-- Sound Blocks -->
+              <button class="code-block b-sound" data-block-id="meow">
+                <span class="blk-icon">🔊</span> bunyikan suara "Meow! 🐱"
+              </button>
+
+              <!-- Control Blocks -->
+              <button class="code-block b-control" data-block-id="repeat3">
+                <span class="blk-icon">🔁</span> ulangi (3 kali): maju &amp; putar
+              </button>
+            </div>
+
+            <!-- Scripts Drop Zone / Assembled Sequence -->
+            <div class="script-assembly-panel">
+              <div class="assembly-header">
+                <span class="assembly-title">📋 Susunan Skrip Kode Kamu:</span>
+                <span class="assembly-hint">Klik balok di atas untuk menyusun perintah</span>
+              </div>
+              <div class="script-drop-zone" id="scriptDropZone">
+                <div class="empty-script-msg" id="emptyScriptMsg">
+                  <span>Belum ada balok kode. Klik balok di atas untuk mulai merangkai!</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="workbench-actions">
+              <button class="btn btn-primary btn-run" id="btnRunScratchCode">
+                <span class="run-icon">🚀</span> Jalankan Kode!
+              </button>
+              <button class="btn btn-outline" id="btnResetSprite">
+                <span class="reset-icon">🔄</span> Reset Posisi Kucing
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Stage & Canvas -->
+        <div class="stage-column">
+          <div class="stage-container">
+            <div class="stage-header-bar">
+              <div class="stage-controls">
+                <button class="stage-flag-btn" id="btnStageFlag" title="Mulai / Jalankan Program">🚩</button>
+                <button class="stage-stop-btn" id="btnStageStop" title="Hentikan Program">🛑</button>
+              </div>
+              <div class="stage-coords-display">
+                <span>X: <strong id="spriteCoordX">0</strong></span>
+                <span>Y: <strong id="spriteCoordY">0</strong></span>
+                <span>Arah: <strong id="spriteAngle">90°</strong></span>
+              </div>
+            </div>
+
+            <!-- Canvas Stage Area -->
+            <div class="stage-viewport" id="stageViewport">
+              <!-- Backdrop -->
+              <div class="stage-backdrop-decor"></div>
+              
+              <!-- Scratch Cat Sprite (Custom Vector/SVG Element for sharp rendering) -->
+              <div class="scratch-sprite-agent" id="scratchCatSprite" style="transform: translate(0px, 0px) rotate(0deg) scale(1);">
+                <div class="speech-bubble-pop" id="catSpeechBubble">Halo!</div>
+                <div class="cat-body-art">
+                  <svg viewBox="0 0 100 100" class="cat-svg">
+                    <!-- Ears -->
+                    <polygon points="25,18 35,40 18,36" fill="#f59e0b" stroke="#b45309" stroke-width="2" />
+                    <polygon points="27,24 33,38 22,35" fill="#fde68a" />
+                    <polygon points="75,18 65,40 82,36" fill="#f59e0b" stroke="#b45309" stroke-width="2" />
+                    <polygon points="73,24 67,38 78,35" fill="#fde68a" />
+                    <!-- Head -->
+                    <ellipse cx="50" cy="46" rx="32" ry="26" fill="#f59e0b" stroke="#b45309" stroke-width="2" />
+                    <!-- Cheeks -->
+                    <ellipse cx="32" cy="54" rx="14" ry="12" fill="#ffffff" />
+                    <ellipse cx="68" cy="54" rx="14" ry="12" fill="#ffffff" />
+                    <!-- Whiskers -->
+                    <line x1="12" y1="50" x2="28" y2="52" stroke="#b45309" stroke-width="2" />
+                    <line x1="10" y1="56" x2="28" y2="56" stroke="#b45309" stroke-width="2" />
+                    <line x1="88" y1="50" x2="72" y2="52" stroke="#b45309" stroke-width="2" />
+                    <line x1="90" y1="56" x2="72" y2="56" stroke="#b45309" stroke-width="2" />
+                    <!-- Eyes -->
+                    <ellipse cx="38" cy="42" rx="7" ry="9" fill="#ffffff" stroke="#b45309" stroke-width="1.5" />
+                    <circle cx="38" cy="42" r="4.5" fill="#1e293b" />
+                    <circle cx="36" cy="40" r="1.5" fill="#ffffff" />
+                    <ellipse cx="62" cy="42" rx="7" ry="9" fill="#ffffff" stroke="#b45309" stroke-width="1.5" />
+                    <circle cx="62" cy="42" r="4.5" fill="#1e293b" />
+                    <circle cx="60" cy="40" r="1.5" fill="#ffffff" />
+                    <!-- Nose & Mouth -->
+                    <polygon points="50,50 46,46 54,46" fill="#d97706" />
+                    <path d="M 46 52 Q 50 56 54 52" fill="none" stroke="#b45309" stroke-width="2" />
+                    <!-- Body -->
+                    <path d="M 32 68 Q 50 64 68 68 L 74 92 Q 50 96 26 92 Z" fill="#f59e0b" stroke="#b45309" stroke-width="2" />
+                    <!-- Belly White -->
+                    <ellipse cx="50" cy="80" rx="16" ry="12" fill="#ffffff" />
+                    <!-- Paws -->
+                    <ellipse cx="34" cy="94" rx="7" ry="4" fill="#ffffff" stroke="#b45309" stroke-width="1.5" />
+                    <ellipse cx="66" cy="94" rx="7" ry="4" fill="#ffffff" stroke="#b45309" stroke-width="1.5" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stage Terminal Logs -->
+            <div class="stage-log-console">
+              <span class="log-label">Terminal Status:</span>
+              <span class="log-msg" id="stageLogMsg">Siap menjalankan instruksi. Klik balok atau tombol Jalankan!</span>
+            </div>
+          </div>
+
+          <!-- Growth Mindset Automated Feedback Card -->
+          <div class="growth-mindset-card mt-3" id="growthMindsetBanner">
+            <div class="gm-icon">🌱</div>
+            <div class="gm-text">
+              <h5 class="gm-title">Pola Pikir Berkembang (Growth Mindset)</h5>
+              <p class="gm-desc" id="gmDesc">
+                "Dalam pemrograman, setiap kali kodemu tidak berjalan sesuai rencana, itu bukan kegagalan. Itu adalah petunjuk untuk melakukan <strong>Debugging</strong> dan membuat otakmu semakin tajam!"
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Module Navigation Footer -->
+      <div class="module-nav-footer">
+        <button class="btn btn-outline" onclick="navigateToModule(3)">⬅️ Kembali ke Materi</button>
+        <button class="btn btn-primary" onclick="markCompletedAndNext(4)">Lanjut ke Kuis Interaktif (HOTS) ➡️</button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 5: KUIS INTERAKTIF (10 SOAL HOTS)
+         ============================================== -->
+    <section class="view-section" id="viewModule5">
+      <div class="module-header-banner">
+        <span class="module-tag">Modul 5 · Asah Nalar Komputasi</span>
+        <h2 class="module-headline">⚡ Kuis Interaktif: 10 Soal Berpikir Kritis (HOTS)</h2>
+        <p class="module-sub">Uji kemampuan analisis logika, identifikasi alur kode berulang, variabel bersarang, dan solusi perbaikan bug di Scratch.</p>
+      </div>
+
+      <div class="quiz-container">
+        <div class="quiz-card">
+          <!-- Quiz Top Info: Counter, Timer, Score -->
+          <div class="quiz-meta-bar">
+            <div class="quiz-meta-item">
+              <span class="meta-icon">📌</span>
+              <span class="meta-val" id="quizCounter">Soal 1 dari 10</span>
+            </div>
+            <div class="quiz-meta-item">
+              <span class="meta-icon">⏱️</span>
+              <span class="meta-val" id="quizTimer">00:00</span>
+            </div>
+            <div class="quiz-meta-item">
+              <span class="meta-icon">⭐</span>
+              <span class="meta-val" id="quizLiveScore">Skor: 0</span>
+            </div>
+          </div>
+
+          <!-- Progress bar -->
+          <div class="quiz-progress-track">
+            <div class="quiz-progress-bar" id="quizProgressBar" style="width: 10%;"></div>
+          </div>
+
+          <!-- Question Body -->
+          <div class="question-body" id="quizQuestionArea">
+            <!-- Dynamic Quiz Item Rendered by JS -->
+          </div>
+
+          <!-- Rationale / Pembahasan Panel -->
+          <div class="rationale-panel" id="quizRationalePanel" style="display: none;">
+            <div class="rationale-header">
+              <span class="rationale-icon" id="rationaleIcon">💡</span>
+              <span class="rationale-title" id="rationaleTitle">Pembahasan Logika</span>
+            </div>
+            <p class="rationale-text" id="rationaleText">Penjelasan mendalam mengapa jawaban tersebut benar...</p>
+            <button class="btn btn-primary mt-3" id="btnNextQuizQuestion">Soal Selanjutnya ➔</button>
+          </div>
+
+          <!-- Quiz Completion Card -->
+          <div class="quiz-summary-card" id="quizSummaryCard" style="display: none;">
+            <div class="summary-emoji">🎉</div>
+            <h3 class="summary-title">Kuis HOTS Selesai!</h3>
+            <div class="summary-score" id="quizFinalScoreDisplay">0 / 100</div>
+            <p class="summary-text" id="quizSummaryText">Analisis kemampuan logismu...</p>
+            <div class="summary-actions">
+              <button class="btn btn-outline" id="btnRetryQuiz">🔄 Ulangi Kuis</button>
+              <button class="btn btn-primary" onclick="markCompletedAndNext(5)">Lanjut ke Asesmen Akhir ➡️</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Module Navigation Footer -->
+      <div class="module-nav-footer">
+        <button class="btn btn-outline" onclick="navigateToModule(4)">⬅️ Kembali ke Simulasi</button>
+        <button class="btn btn-primary" onclick="markCompletedAndNext(5)">Lanjut ke Asesmen Akhir ➡️</button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 6: ASESMEN AKHIR (SUMATIF & PREDIKAT)
+         ============================================== -->
+    <section class="view-section" id="viewModule6">
+      <div class="module-header-banner">
+        <span class="module-tag">Modul 6 · Evaluasi Capaian Pembelajaran</span>
+        <h2 class="module-headline">🎯 Asesmen Akhir: Uji Kompetensi Scratch</h2>
+        <p class="module-sub">Kerjakan 10 butir soal tingkat kesulitan sedang hingga tinggi. Nilai ini akan menentukan predikat pada Sertifikat Resmi Hasil Belajarmu!</p>
+      </div>
+
+      <div class="quiz-container">
+        <div class="quiz-card">
+          <!-- Final Assessment Meta Bar -->
+          <div class="quiz-meta-bar">
+            <div class="quiz-meta-item">
+              <span class="meta-icon">📋</span>
+              <span class="meta-val" id="finalExamCounter">Soal 1 dari 10</span>
+            </div>
+            <div class="quiz-meta-item">
+              <span class="meta-icon">⏳</span>
+              <span class="meta-val" id="finalExamTimer">00:00</span>
+            </div>
+            <div class="quiz-meta-item">
+              <span class="meta-icon">🏆</span>
+              <span class="meta-val" id="finalExamLiveScore">Skor: 0</span>
+            </div>
+          </div>
+
+          <!-- Progress Track -->
+          <div class="quiz-progress-track">
+            <div class="quiz-progress-bar" id="finalExamProgressBar" style="width: 10%;"></div>
+          </div>
+
+          <!-- Question Content -->
+          <div class="question-body" id="finalExamQuestionArea">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Exam Completed Result Card -->
+          <div class="exam-summary-card" id="finalExamResultCard" style="display: none;">
+            <div class="exam-badge-icon" id="examBadgeIcon">🏆</div>
+            <h3 class="exam-res-title">Selamat! Kamu Telah Menyelesaikan Asesmen Akhir</h3>
+            
+            <div class="exam-score-box">
+              <div class="score-large" id="finalExamScore">0</div>
+              <div class="score-max">/ 100 Poin</div>
+            </div>
+
+            <div class="predicate-pill" id="predicatePill">
+              Predikat: <strong id="predicateName">Sangat Baik</strong>
+            </div>
+
+            <!-- Grade Criteria Info -->
+            <div class="grade-rubric-table">
+              <div class="rubric-row" id="rubric90">
+                <span class="r-range">90 – 100</span>
+                <span class="r-cat">Sangat Baik 🌟 (Sertifikat Kehormatan)</span>
+              </div>
+              <div class="rubric-row" id="rubric80">
+                <span class="r-range">80 – 89</span>
+                <span class="r-cat">Baik 👍</span>
+              </div>
+              <div class="rubric-row" id="rubric70">
+                <span class="r-range">70 – 79</span>
+                <span class="r-cat">Cukup 👌</span>
+              </div>
+              <div class="rubric-row" id="rubricBelow70">
+                <span class="r-range">&lt; 70</span>
+                <span class="r-cat">Perlu Bimbingan 📖</span>
+              </div>
+            </div>
+
+            <div class="summary-actions mt-4">
+              <button class="btn btn-outline" id="btnRetryFinalExam">🔄 Ulangi Asesmen</button>
+              <button class="btn btn-primary btn-claim" onclick="markCompletedAndNext(6)">
+                Lanjut ke Lembar Refleksi ➡️
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Module Navigation Footer -->
+      <div class="module-nav-footer">
+        <button class="btn btn-outline" onclick="navigateToModule(5)">⬅️ Kembali ke Kuis</button>
+        <button class="btn btn-primary" onclick="markCompletedAndNext(6)">Lanjut ke Refleksi ➡️</button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 7: REFLEKSI BELAJAR
+         ============================================== -->
+    <section class="view-section" id="viewModule7">
+      <div class="module-header-banner">
+        <span class="module-tag">Modul 7 · Metakognisi &amp; Evaluasi Diri</span>
+        <h2 class="module-headline">💭 Refleksi Hasil Belajar Peserta Didik</h2>
+        <p class="module-sub">Belajar yang bermakna terjadi ketika kita merenungkan apa yang telah dipelajari. Tuliskan tanggapan jujurmu pada lembar refleksi di bawah ini:</p>
+      </div>
+
+      <div class="reflection-container">
+        <div class="reflection-card">
+          <!-- Student Identity Input -->
+          <div class="identity-group-row">
+            <div class="form-field">
+              <label for="studentNameInput" class="form-label">Nama Lengkap Siswa:</label>
+              <input type="text" id="studentNameInput" class="form-input" placeholder="Masukkan nama lengkapmu..." value="Siswa Berprestasi" />
+            </div>
+            <div class="form-field">
+              <label for="studentClassInput" class="form-label">Kelas / Sekolah:</label>
+              <input type="text" id="studentClassInput" class="form-input" placeholder="Contoh: IX-A / SMP Negeri" value="IX-A" />
+            </div>
+          </div>
+
+          <!-- Emotional Mood Indicator -->
+          <div class="mood-selector-wrap mt-4">
+            <label class="form-label">Bagaimana perasaanmu setelah mempelajari Scratch hari ini?</label>
+            <div class="mood-options">
+              <button class="mood-btn" data-mood="super">🤩 Sangat Bersemangat</button>
+              <button class="mood-btn active" data-mood="happy">😊 Senang &amp; Tertantang</button>
+              <button class="mood-btn" data-mood="neutral">🤔 Perlu Banyak Berlatih</button>
+              <button class="mood-btn" data-mood="confused">💡 Ingin Mengulang Materi</button>
+            </div>
+          </div>
+
+          <!-- 4 Core Guided Reflection Prompts -->
+          <div class="reflection-prompts-list mt-4">
+            <div class="prompt-box">
+              <label for="refl1" class="prompt-label">
+                <span class="p-num">1</span> Saya sudah memahami...
+              </label>
+              <textarea id="refl1" rows="3" class="form-textarea" placeholder="Tuliskan materi atau konsep Scratch yang paling kamu kuasai (misal: koordinat X/Y, balok Motion, konsep loop)...">Konsep dasar antarmuka Scratch, 9 kategori balok warna, dan bagaimana balok kejadian (Events) mengawali seluruh instruksi.</textarea>
+            </div>
+
+            <div class="prompt-box mt-3">
+              <label for="refl2" class="prompt-label">
+                <span class="p-num">2</span> Hal yang paling menarik adalah...
+              </label>
+              <textarea id="refl2" rows="3" class="form-textarea" placeholder="Bagian mana yang paling seru saat kamu belajar tadi?">Ketika melihat sprite kucing bergerak, berputar, dan berbicara secara live saat balok skrip dieksekusi.</textarea>
+            </div>
+
+            <div class="prompt-box mt-3">
+              <label for="refl3" class="prompt-label">
+                <span class="p-num">3</span> Hal yang masih membingungkan adalah...
+              </label>
+              <textarea id="refl3" rows="3" class="form-textarea" placeholder="Bagian mana yang masih butuh latihan lebih banyak?">Penggunaan variabel bersarang dan logika percabangan kondisi ganda (if-else dengan operator AND/OR).</textarea>
+            </div>
+
+            <div class="prompt-box mt-3">
+              <label for="refl4" class="prompt-label">
+                <span class="p-num">4</span> Rencana saya setelah belajar materi ini adalah...
+              </label>
+              <textarea id="refl4" rows="3" class="form-textarea" placeholder="Karya atau proyek game apa yang ingin kamu kembangkan?">Membuat game labirin sederhana dengan sistem skor dan membagikannya ke teman-teman sekelas.</textarea>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="reflection-actions mt-4">
+            <button class="btn btn-tosca" id="btnSaveReflection">💾 Simpan Refleksi</button>
+            <button class="btn btn-primary" onclick="markCompletedAndNext(7)">Klaim Sertifikat Hasil Belajar 🎓 ➡️</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module Navigation Footer -->
+      <div class="module-nav-footer">
+        <button class="btn btn-outline" onclick="navigateToModule(6)">⬅️ Kembali ke Asesmen Akhir</button>
+        <button class="btn btn-primary" onclick="markCompletedAndNext(7)">Buka Sertifikat ➡️</button>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         VIEW 8: SERTIFIKAT HASIL BELAJAR
+         ============================================== -->
+    <section class="view-section" id="viewModule8">
+      <div class="module-header-banner">
+        <span class="module-tag">Modul 8 · Dokumen Penghargaan Resmi</span>
+        <h2 class="module-headline">🎓 Sertifikat Hasil Belajar Digital</h2>
+        <p class="module-sub">Sertifikat resmi kelulusan modul pembelajaran TIK Scratch. Nama, predikat, dan nilai akhirmu dicantumkan secara otomatis.</p>
+      </div>
+
+      <!-- Certificate Actions Bar -->
+      <div class="certificate-toolbar">
+        <div class="cert-inputs-preview">
+          <div class="input-inline">
+            <label for="certNameEditor">Nama di Sertifikat:</label>
+            <input type="text" id="certNameEditor" value="Siswa Berprestasi" class="form-input-sm" />
+          </div>
+          <div class="input-inline">
+            <label for="certClassEditor">Kelas / Asal:</label>
+            <input type="text" id="certClassEditor" value="IX-A · SMP Negeri" class="form-input-sm" />
+          </div>
+        </div>
+
+        <div class="cert-btn-group">
+          <button class="btn btn-primary" id="btnDownloadCertPdf">
+            📥 Unduh Sertifikat PDF
+          </button>
+          <button class="btn btn-tosca" id="btnPrintCert">
+            🖨 Cetak Sertifikat
+          </button>
+          <button class="btn btn-outline" onclick="navigateToModule(0)">
+            🏠 Menu Utama
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable Certificate Canvas / Container -->
+      <div class="certificate-wrapper" id="printableCertArea">
+        <div class="certificate-card">
+          <!-- Modern Guilloche Frame Border (Purple & Tosca) -->
+          <div class="cert-outer-border">
+            <div class="cert-inner-border">
+              
+              <!-- Decorative Corner Geometry -->
+              <div class="corner-flair top-left"></div>
+              <div class="corner-flair top-right"></div>
+              <div class="corner-flair bottom-left"></div>
+              <div class="corner-flair bottom-right"></div>
+
+              <!-- Top Emblem & Watermark -->
+              <div class="cert-header-block">
+                <div class="cert-emblem-badge">
+                  <span class="emblem-star">★</span>
+                  <span class="emblem-icon">🐱</span>
+                  <span class="emblem-star">★</span>
+                </div>
+                <h3 class="cert-institution">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI</h3>
+                <h4 class="cert-dept">MODUL INTERAKTIF TEKNOLOGI INFORMASI DAN KOMUNIKASI (TIK)</h4>
+                <div class="cert-title-rule"></div>
+                <h2 class="cert-main-heading">SERTIFIKAT KELULUSAN</h2>
+                <p class="cert-serial-no" id="certSerialNo">No: CERT-SCRATCH-2026-IX-8921</p>
+              </div>
+
+              <!-- Certificate Body -->
+              <div class="cert-body-block">
+                <p class="cert-given-text">Diberikan secara terhormat kepada:</p>
+                
+                <h1 class="cert-student-name" id="certStudentName">Siswa Berprestasi</h1>
+                <p class="cert-student-class" id="certStudentClass">Kelas IX-A · SMP Negeri</p>
+
+                <p class="cert-completion-desc">
+                  Atas dedikasi, partisipasi aktif, serta keberhasilan dalam menuntaskan seluruh rangkaian materi, simulasi praktik, dan evaluasi kompetensi pada modul:
+                </p>
+
+                <div class="cert-subject-pill">
+                  <span class="subj-tag">Materi Pembelajaran</span>
+                  <h3 class="subj-name">Pemrograman Visual Berbasis Blok dengan Scratch 3.0</h3>
+                </div>
+
+                <!-- Score & Predicate Showcase -->
+                <div class="cert-metrics-row">
+                  <div class="metric-item">
+                    <span class="m-lbl">NILAI AKHIR</span>
+                    <span class="m-val" id="certFinalScore">95</span>
+                  </div>
+                  <div class="metric-divider"></div>
+                  <div class="metric-item">
+                    <span class="m-lbl">PREDIKAT KELULUSAN</span>
+                    <span class="m-val highlight-predicate" id="certPredicate">SANGAT BAIK</span>
+                  </div>
+                  <div class="metric-divider"></div>
+                  <div class="metric-item">
+                    <span class="m-lbl">TANGGAL PENERBITAN</span>
+                    <span class="m-val" id="certDate">18 September 2026</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Certificate Signatures & Security Stamp -->
+              <div class="cert-footer-block">
+                <div class="cert-sig-col">
+                  <div class="sig-title">Guru Pengampu TIK</div>
+                  <div class="digital-sig-mark">
+                    <span class="sig-font">Guru TIK Inovatif, S.Kom</span>
+                  </div>
+                  <div class="sig-name">Tim Pembina TIK SMP</div>
+                  <div class="sig-id">NIP. 19880415 201101 1 008</div>
+                </div>
+
+                <div class="cert-seal-col">
+                  <div class="official-gold-seal">
+                    <div class="seal-inner-circle">
+                      <span class="seal-icon">🏆</span>
+                      <span class="seal-text">VERIFIED</span>
+                    </div>
+                  </div>
+                  <span class="seal-caption">Dokumen Asli Terverifikasi</span>
+                </div>
+
+                <div class="cert-sig-col">
+                  <div class="sig-title">Kepala Pusat Belajar Digital</div>
+                  <div class="digital-sig-mark">
+                    <span class="sig-font">Dr. Pembelajaran Digital</span>
+                  </div>
+                  <div class="sig-name">Instruktur Pemrograman</div>
+                  <div class="sig-id">ID Instruktur: MIT-SCRATCH-2026</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Module Navigation Footer -->
+      <div class="module-nav-footer">
+        <button class="btn btn-outline" onclick="navigateToModule(7)">⬅️ Kembali ke Refleksi</button>
+        <button class="btn btn-primary" onclick="resetAndRestartCourse()">🔄 Ulangi Materi dari Awal</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Universal Sticky Bottom Navigation Bar -->
+  <footer class="app-bottom-bar">
+    <div class="bottom-bar-inner">
+      <button class="bar-btn" id="btnBottomHome" onclick="navigateToModule(0)">
+        <span class="b-icon">🏠</span>
+        <span class="b-text">Home</span>
+      </button>
+
+      <div class="bar-middle-nav">
+        <button class="bar-btn" id="btnBottomPrev" onclick="navigatePrev()">
+          <span class="b-icon">⬅️</span>
+          <span class="b-text">Sebelumnya</span>
+        </button>
+
+        <span class="bar-step-indicator" id="barStepIndicator">Langkah 1 / 8</span>
+
+        <button class="bar-btn next-highlight" id="btnBottomNext" onclick="navigateNext()">
+          <span class="b-text">Selanjutnya</span>
+          <span class="b-icon">➡️</span>
+        </button>
+      </div>
+
+      <button class="bar-btn" id="btnBottomRestart" onclick="confirmRestart()" title="Ulangi Materi">
+        <span class="b-icon">🔄</span>
+        <span class="b-text">Ulangi Materi</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Popup -->
+  <div class="toast-popup" id="toastPopup">
+    <span class="toast-icon" id="toastIcon">ℹ️</span>
+    <span class="toast-msg" id="toastMsg">Pemberitahuan</span>
+  </div>
+
+  <!-- Video Mockup Modal -->
+  <div class="modal-backdrop" id="videoModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h4 class="modal-title">🎬 Video Pemantik: Konsep Pemrograman Visual</h4>
+        <button class="modal-close-btn" id="btnCloseVideoModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="simulated-player">
+          <div class="player-canvas-screen">
+            <div class="animated-video-concept">
+              <div class="av-cat">🐱</div>
+              <div class="av-bubble">"Dengan Scratch, ide kita langsung jadi kenyataan!"</div>
+              <div class="av-code-stack">
+                <div class="av-blk yellow">when ⚑ clicked</div>
+                <div class="av-blk blue">forever: move (10) steps</div>
+                <div class="av-blk purple">play sound [meow]</div>
+              </div>
+            </div>
+          </div>
+          <div class="player-controls-mock">
+            <button class="ctrl-btn">▶ / ❚❚</button>
+            <div class="player-progress-bar">
+              <div class="player-progress-fill"></div>
+            </div>
+            <span class="time-stamp">01:15 / 01:45</span>
+          </div>
+        </div>
+        <p class="video-modal-expl mt-3">
+          Video ini menggambarkan bagaimana programmer menyusun logika menggunakan balok visual seperti puzzle untuk memberi nyawa pada objek digital di layar tanpa perlu menghafal baris kode yang rumit.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Script -->
+  <script src="app.js"></script>
+</body>
+</html>
